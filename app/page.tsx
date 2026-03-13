@@ -10,7 +10,7 @@ import BlitzPanel from '@/components/BlitzPanel'
 
 export default function Page() {
   // ── Video state ──────────────────────────────────────────────
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
   const hlsRef = useRef<any>(null)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
