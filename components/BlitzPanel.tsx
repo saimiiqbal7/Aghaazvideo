@@ -92,19 +92,15 @@ export default function BlitzPanel({
       {/* Panel */}
       <div
         style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          bottom: 0,
-          width: 300,
+          height: '100%',
+          width: isOpen ? 300 : 0,
           background: 'var(--bg-surface)',
-          borderLeft: '0.5px solid var(--border-subtle)',
-          zIndex: 20,
-          transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
-          transition: 'transform var(--panel-transition)',
+          borderLeft: isOpen ? '0.5px solid var(--border-subtle)' : 'none',
+          transition: 'width var(--panel-transition)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
+          flexShrink: 0,
         }}
       >
         {/* Header */}

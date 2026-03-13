@@ -135,19 +135,15 @@ export default function NotesPanel({ isOpen, onToggle, currentTime, onSaveNote }
       {/* Panel */}
       <div
         style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: 340,
+          height: '100%',
+          width: isOpen ? 340 : 0,
           background: 'var(--bg-surface)',
-          borderRight: '0.5px solid var(--border-subtle)',
-          zIndex: 20,
-          transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
-          transition: 'transform var(--panel-transition)',
+          borderRight: isOpen ? '0.5px solid var(--border-subtle)' : 'none',
+          transition: 'width var(--panel-transition)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
+          flexShrink: 0,
         }}
       >
         {/* Header */}

@@ -46,12 +46,17 @@ export default function Page() {
   ])
   const [isBlitzLoading, setIsBlitzLoading] = useState(false)
 
+  const makeMsgId = () =>
+    (typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`)
+
   const addSystemMsg = useCallback((content: string) => {
-    setBlitzMessages(prev => [...prev, { id: `s-${Date.now()}`, role: 'system', content }])
+    setBlitzMessages(prev => [...prev, { id: makeMsgId(), role: 'system', content }])
   }, [])
 
   const addBlitzMsg = useCallback((content: string) => {
-    setBlitzMessages(prev => [...prev, { id: `b-${Date.now()}`, role: 'blitz', content }])
+    setBlitzMessages(prev => [...prev, { id: makeMsgId(), role: 'blitz', content }])
   }, [])
 
   const callBlitz = useCallback(
@@ -133,6 +138,21 @@ export default function Page() {
     }
   }, [])
 
+  // ── Auto-pause when tab is hidden ────────────────────────────
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden) {
+        const v = videoRef.current
+        if (v && !v.paused) {
+          v.pause()
+          addSystemMsg('⏸ Paused because you switched tabs')
+        }
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [addSystemMsg])
+
   // ── Checkpoint trigger ───────────────────────────────────────
   useEffect(() => {
     if (activeCheckpoint || !isPlayingRef.current) return
@@ -184,7 +204,7 @@ export default function Page() {
   // ── Blitz send ───────────────────────────────────────────────
   const handleBlitzSend = useCallback(
     async (message: string) => {
-      setBlitzMessages(prev => [...prev, { id: `u-${Date.now()}`, role: 'user', content: message }])
+      setBlitzMessages(prev => [...prev, { id: makeMsgId(), role: 'user', content: message }])
       callBlitz(
         `Student is watching a lesson called "Behind the Scenes at Aghaaz" and asks: "${message}"`,
       )
